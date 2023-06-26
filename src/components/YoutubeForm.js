@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import "./Youtube.css";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 
 const YoutubeForm = () => {
@@ -12,7 +12,7 @@ const YoutubeForm = () => {
       const data = await response.json();
 
       return {
-        name: "shiva",
+        name: "",
         email: "",
         channel: "",
         social: {
@@ -54,12 +54,21 @@ const YoutubeForm = () => {
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <div className="input-div">
           <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            id="name"
-            {...register("name", {
-              required: "Name is Required",
-            })}
+          <Controller
+            control={control}
+            name="name"
+            render={({ field }) => {
+              return (
+                <input
+                  type="text"
+                  id="name"
+                  {...field}
+                  {...register("name", {
+                    required: "Name is Required",
+                  })}
+                />
+              );
+            }}
           />
           <p className="err-msg">{errors.name?.message}</p>
         </div>
@@ -203,18 +212,20 @@ const YoutubeForm = () => {
             </button>
           </div>
         </div>
-        
 
         <div className="handle-btns">
-        <button className="submit-btn">Submit</button>
-        <button type="button" onClick={() => reset()} className="submit-btn">
-          Reset
-        </button>
-        <button onClick={handleGetValues} type="button" className="submit-btn">
-          Get Values
-        </button>
+          <button className="submit-btn">Submit</button>
+          <button type="button" onClick={() => reset()} className="submit-btn">
+            Reset
+          </button>
+          <button
+            onClick={handleGetValues}
+            type="button"
+            className="submit-btn"
+          >
+            Get Values
+          </button>
         </div>
-
       </form>
 
       <DevTool control={control} />
